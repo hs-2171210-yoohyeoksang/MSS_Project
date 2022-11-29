@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>웹소켓으로 MQTT 브로커에 접속</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+      <script src= "/static/mqttio.js" type="text/javascript"></script>
+      <script src="/static/face.js" type="text/javascript"></script>
+      <script>
+            window.onload = function () {
+                // http://224..129:8080/에서 224...의 IP만 끊어내는 코드
+                var url = new String(document.location);
+                ip = (url.split("//"))[1]; // ip = "224...:8080/"
+                ip = (ip.split(":"))[0]; // ip = "224..."
+                document.getElementById("broker").value = ip
+            }
+      </script>
+      <style>
+         canvas {background-color: black;}
+         #prompt {border: 7px solid black; width:485px; height:70px; text-align: center;}
+      </style>
+   <body>
+         <h3>비접촉 발열 측정기</h3>
+         <hr>
+         <form id="connection-form">
+            <b>브로커 IP:</b>
+            <input id="broker" type="text" name="broker" value=""><br>
+            <b>포트 번호 : 9001</b><br>
+            연결 시작 : 
+            <input type="button" onclick="startConnect()" value="Connect">
+            <br>
+            연결 종료 : 
+            <input type="button" onclick="startDisconnect()" value="Disconnect">
+         </form>
+         <hr>
+         <b>Connect -> 거리감지 시작 -> 체온감지 시작 순서로 실행</b>
+         <hr>
+         <canvas id="myCanvas" width="500" height="300"></canvas>
+         <form id="subscribe-form">
+            <p>
+            <input type="button" onclick="subscribe('ultrasonic')" value="거리감지 시작">&nbsp;&nbsp;&nbsp;
+            <input type="button" onclick="unsubscribe('ultrasonic')" value="거리감지 종료"><p>
+            <input type="button" onclick="subscribe('temperature')" value="체온감지 시작">&nbsp;&nbsp;&nbsp;
+            <input type="button" onclick="unsubscribe('temperature')" value="체온감지 종료">
+         </form>
+         <div id="prompt"></div>
+         <div id="messages"></div>
+   </body>
+</html>
